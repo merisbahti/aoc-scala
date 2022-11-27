@@ -5,6 +5,8 @@ case class Floor() extends Seat
 
 object Aoc11 extends App {
   type Seats = Array[Array[Seat]]
+
+  // make this lazier to make it more efficient
   def compareSeats(a: Seats, b: Seats): Boolean = (for (
     (rows, y) <- a.zipWithIndex;
     (seatA, x) <- rows.zipWithIndex;
@@ -21,7 +23,7 @@ object Aoc11 extends App {
           case "." => Floor()
           case "#" => Occupied()
           case "L" => Empty()
-          case c   => throw new Exception(s"Couldn't parse character: $c")
+          case c   => throw new Exception(s"Invalid character in input: $c")
         }
       })
   }
@@ -31,20 +33,17 @@ object Aoc11 extends App {
       y: Integer,
       input: Array[Array[Seat]]
   ): Integer = {
-    val adj =
-      for (dx <- -1 to 1; dy <- -1 to 1; if dx != 0 || dy != 0)
-        yield (dx, dy)
-    val mapped =
-      adj.map { case (dx, dy) =>
-        input
+    val adjacentSeats =
+      for (
+        dx <- -1 to 1;
+        dy <- -1 to 1;
+        if dx != 0 || dy != 0
+      )
+        yield (input
           .lift(y + dy)
-          .flatMap(_.lift(x + dx))
-      }
+          .flatMap(_.lift(x + dx)))
 
-    mapped.count(_ match {
-      case Some(Occupied()) => true
-      case _                => false
-    })
+    adjacentSeats.count(_ == Some(Occupied()))
   }
 
   def nextSeatState(seat: Seat, adjacentCount: Integer): Seat = seat match {
@@ -71,16 +70,15 @@ object Aoc11 extends App {
     var seats = iter(parsed);
 
     var equal = compareSeats(parsed, seats)
+
+    // maybe think about infinite loops here?
     while (!equal) {
       val oldSeats = seats;
       seats = iter(seats)
       equal = compareSeats(oldSeats, seats)
     }
 
-    val occupiedCount = seats.flatten.count(_ match {
-      case Occupied() => true
-      case _          => false
-    })
+    val occupiedCount = seats.flatten.count(_ == Occupied())
 
     occupiedCount
   }
