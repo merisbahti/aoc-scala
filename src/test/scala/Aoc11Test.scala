@@ -1,3 +1,5 @@
+import scala.util.Using
+import scala.io.Source
 class Aoc11Test extends org.scalatest.funsuite.AnyFunSuite {
   val simpleExample = """L.L
 LLL
@@ -27,6 +29,15 @@ L.LLLLL.LL
 """
   test("test input") {
     assert(Aoc11.sol(testInput) == 37)
+  }
+
+  test("real input") {
+    val res = Using(Source.fromFile("src/test/scala/Aoc11-input.txt")) {
+      source =>
+        source.mkString
+    }
+    val input = res.get
+    assert(Aoc11.sol(input) === 2329)
   }
 
 }
