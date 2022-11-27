@@ -4,7 +4,14 @@ case class Occupied() extends Seat
 case class Floor() extends Seat
 
 object Aoc11 extends App {
-  def parse(input: String): Array[Array[Seat]] = {
+  type Seats = Array[Array[Seat]]
+  def compareSeats(a: Seats, b: Seats): Boolean = (for (
+    (rows, y) <- a.zipWithIndex;
+    (seatA, x) <- rows.zipWithIndex;
+    seatB = b.lift(y).flatMap(_.lift(x))
+  ) yield (seatB.contains(seatA))).find(_ == false).isEmpty
+
+  def parse(input: String): Seats = {
     val a: Seat = Empty()
     val lines = input.split("\n")
     val stuff = lines.map(_.split(""))
@@ -40,27 +47,37 @@ object Aoc11 extends App {
     })
   }
 
-  def iter(seat: Seat, adjacentCount: Integer): Seat = seat match {
+  def nextSeatState(seat: Seat, adjacentCount: Integer): Seat = seat match {
     case Empty() if adjacentCount == 0    => Occupied()
     case Occupied() if adjacentCount >= 4 => Empty()
     case e                                => e
   }
 
-  def sol(input: String): Integer = {
-    val parsed = parse(input);
-
-    val ret = parsed.zipWithIndex.map {
+  def iter(seats: Seats): Seats =
+    seats.zipWithIndex.map {
       case (ys, y) => {
         ys.zipWithIndex.map {
           case (xs, x) => {
-            val adj = getAdjacentOccupied(x, y, parsed);
-            iter(xs, adj)
+            val adj = getAdjacentOccupied(x, y, seats);
+            nextSeatState(xs, adj)
           }
         }
       }
     }
 
-    val occupiedCount = ret.flatten.count(_ match {
+  def sol(input: String): Integer = {
+    val parsed = parse(input);
+
+    var seats = iter(parsed);
+
+    var equal = compareSeats(parsed, seats)
+    while (!equal) {
+      val oldSeats = seats;
+      seats = iter(seats)
+      equal = compareSeats(oldSeats, seats)
+    }
+
+    val occupiedCount = seats.flatten.count(_ match {
       case Occupied() => true
       case _          => false
     })

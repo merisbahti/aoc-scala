@@ -28,4 +28,5 @@ L.LLLLL.LL
   test("test input") {
     assert(Aoc11.sol(testInput) == 37)
   }
+
 }
