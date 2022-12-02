@@ -32,7 +32,7 @@ C Z
           source.mkString
       }
     val input = res.get
-    assert(Day02.sol2(input) === 199628)
+    assert(Day02.sol2(input) === 11373)
   }
 
 }
