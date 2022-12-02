@@ -22,6 +22,10 @@ class Day1Test extends org.scalatest.funsuite.AnyFunSuite {
     assert(Day01.sol(testInput) == 24000)
   }
 
+  test("test input sol2") {
+    assert(Day01.sol2(testInput) == 45000)
+  }
+
   test("real input") {
     val res =
       Using(Source.fromFile("src/test/scala/year2022/Day01-input.txt")) {
@@ -30,6 +34,16 @@ class Day1Test extends org.scalatest.funsuite.AnyFunSuite {
       }
     val input = res.get
     assert(Day01.sol(input) === 67633)
+  }
+
+  test("real input part2") {
+    val res =
+      Using(Source.fromFile("src/test/scala/year2022/Day01-input.txt")) {
+        source =>
+          source.mkString
+      }
+    val input = res.get
+    assert(Day01.sol2(input) === 199628)
   }
 
 }
