@@ -1,9 +1,11 @@
+package year2020
+
 sealed abstract class Seat
 case class Empty() extends Seat
 case class Occupied() extends Seat
 case class Floor() extends Seat
 
-object Aoc11 extends App {
+object Day11 extends App {
   type Seats = Array[Array[Seat]]
 
   // make this lazier to make it more efficient
