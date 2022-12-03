@@ -7,12 +7,12 @@ class DayXXTest extends org.scalatest.funsuite.AnyFunSuite {
   /* CHANGE THESE */
   val inputFile = "src/test/scala/year2022/Day02-input.txt"
   val testInput = """"""
-  val Day = Day02
+  val Day = DayXX
   val skipTest = true
 
   test("test input") {
     if (!skipTest)
-      assert(Day.sol(testInput) == 15)
+      assert(Day.sol1(testInput) == 15)
   }
 
   test("test input sol2") {
@@ -27,7 +27,7 @@ class DayXXTest extends org.scalatest.funsuite.AnyFunSuite {
           source.mkString
         }
       val input = res.get
-      assert(Day.sol(input) === 13005)
+      assert(Day.sol1(input) === 13005)
     }
   }
 
