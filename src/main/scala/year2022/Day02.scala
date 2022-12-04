@@ -1,22 +1,19 @@
 package year2022
 
-import java.text.ParseException
-
-sealed trait Shape
-final case object Rock extends Shape
-final case object Paper extends Shape
-final case object Scissor extends Shape
-
-case class Match(op: Shape, you: Shape)
-
-sealed trait Outcome
-final case object Loss extends Outcome
-final case object Draw extends Outcome
-final case object Win extends Outcome
-
-case class Row(op: Shape, outcome: Outcome)
-
 object Day02 extends App {
+  sealed trait Shape
+  case object Rock extends Shape
+  case object Paper extends Shape
+  case object Scissor extends Shape
+
+  case class Match(op: Shape, you: Shape)
+
+  sealed trait Outcome
+  case object Loss extends Outcome
+  case object Draw extends Outcome
+  case object Win extends Outcome
+
+  case class Row(op: Shape, outcome: Outcome)
 
   def parse(row: String): Match = {
     val Pattern = "([ABC]) ([XYZ])".r
