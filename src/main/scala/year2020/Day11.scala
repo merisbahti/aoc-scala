@@ -15,18 +15,16 @@ object Day11 extends App {
     seatB = b.lift(y).flatMap(_.lift(x))
   ) yield (seatB.contains(seatA))).find(_ == false).isEmpty
 
-  def parse(input: String): Seats = {
+  def parse(input: String): Array[Array[Seat]] = {
     val a: Seat = Empty()
     val lines = input.split("\n")
     val stuff = lines.map(_.split(""))
     stuff
       .map(_.map {
-        _ match {
-          case "." => Floor()
-          case "#" => Occupied()
-          case "L" => Empty()
-          case c   => throw new Exception(s"Invalid character in input: $c")
-        }
+        case "." => Floor()
+        case "#" => Occupied()
+        case "L" => Empty()
+        case c   => throw new Exception(s"Invalid character in input: $c")
       })
   }
 
