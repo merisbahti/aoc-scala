@@ -67,8 +67,30 @@ object Day05 extends App {
       runInstruction(state, instruction)
     }
     end.map(_.head).reduce(_ + _)
-
   }
-  def sol2(input: String): Int = ???
+
+  def runInstruction2(state: Seq[Seq[String]], instruction: Instruction) = {
+    val from = state.apply(instruction.fromIndex)
+    val to = state.apply(instruction.toIndex)
+    from.take(instruction.move)
+    val newFrom = from.slice(instruction.move, from.length)
+    val newTo = to.prependedAll(from.slice(0, instruction.move))
+    val newState = state
+      .updated(instruction.fromIndex, newFrom)
+      .updated(instruction.toIndex, newTo)
+    newState
+  }
+
+  def sol2(input: String): String = {
+    val (state, instructions) = input.split("\n\n").toSeq match {
+      case Seq(rawInitialState, rawInstructions) => {
+        (parseState(rawInitialState), parseInstructions(rawInstructions))
+      }
+    }
+    val end = instructions.foldLeft(state) { case (state, instruction) =>
+      runInstruction2(state, instruction)
+    }
+    end.map(_.head).reduce(_ + _)
+  }
 
 }
