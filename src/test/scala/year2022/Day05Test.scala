@@ -35,7 +35,7 @@ class Day05Test extends org.scalatest.funsuite.AnyFunSuite {
 
   test("test input sol2") {
     if (!skipTest)
-      assert(Day.sol2(testInput) == 12)
+      assert(Day.sol2(testInput) == "MCD")
   }
 
   test("real input") {
@@ -45,7 +45,7 @@ class Day05Test extends org.scalatest.funsuite.AnyFunSuite {
           source.mkString
         }
       val input = res.get
-      assert(Day.sol1(input) === 13005)
+      assert(Day.sol1(input) === "QGTHFZBHV")
     }
   }
 
@@ -56,7 +56,7 @@ class Day05Test extends org.scalatest.funsuite.AnyFunSuite {
           source.mkString
         }
       val input = res.get
-      assert(Day.sol2(input) === "ABCD")
+      assert(Day.sol2(input) === "MGDMPSZTM")
     }
   }
 
