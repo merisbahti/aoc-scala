@@ -1,10 +1,11 @@
-lazy val root = (project in file(".")).
-  settings(
-    inThisBuild(List(
+lazy val root = (project in file(".")).settings(
+  inThisBuild(
+    List(
       organization := "com.example",
       scalaVersion := "2.13.6"
-    )),
-    name := "aoc-scala"
-  )
+    )
+  ),
+  name := "scala-aoc"
+)
 
 libraryDependencies += "org.scalatest" %% "scalatest" % "3.2.9" % Test
