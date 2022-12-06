@@ -53,7 +53,7 @@ class Day06Test extends org.scalatest.funsuite.AnyFunSuite {
           source.mkString
         }
       val input = res.get
-      assert(Day.sol2(input) === 11373)
+      assert(Day.sol2(input) === 2421)
     }
   }
 
