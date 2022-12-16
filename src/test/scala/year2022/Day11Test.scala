@@ -42,8 +42,9 @@ class Day11Test extends org.scalatest.funsuite.AnyFunSuite {
   }
 
   test("test input sol2") {
-    if (!skipTest)
-      assert(Day.sol2(testInput) == 12)
+    if (!skipTest) {
+      assert(Day.sol2(testInput, 10000) == 2713310158L)
+    }
   }
 
   test("real input") {
@@ -64,7 +65,7 @@ class Day11Test extends org.scalatest.funsuite.AnyFunSuite {
           source.mkString
         }
       val input = res.get
-      assert(Day.sol2(input) === 11373)
+      assert(Day.sol2(input, 10000) === 32333418600)
     }
   }
 
