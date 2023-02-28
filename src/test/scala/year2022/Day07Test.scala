@@ -34,7 +34,7 @@ class Day07Test extends org.scalatest.funsuite.AnyFunSuite {
 
   test("test input") {
     if (!skipTest)
-      assert(Day.sol1(testInput) == 15)
+      assert(Day.sol1(testInput) == 95437)
   }
 
   test("test input sol2") {

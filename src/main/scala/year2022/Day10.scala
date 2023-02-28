@@ -7,7 +7,7 @@ object Day10 extends App {
     val regex = "(\\w+)( -?\\d+)?".r
     val parsed = instructions.map {
       case regex("noop", null) => ("noop", 0)
-      case regex("addx", abc) => ("addx", abc.trim.toInt)
+      case regex("addx", abc)  => ("addx", abc.trim.toInt)
     }
 
     parsed.foldLeft(Seq[Int](1)) {
@@ -32,7 +32,6 @@ object Day10 extends App {
 
   def sol2(input: String): String = {
     val execution = executeProgram(input)
-    execution
     val screen = {
       (0 to 5)
         .map { case (y) =>
