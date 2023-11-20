@@ -42,14 +42,31 @@ object Day12 {
 
   def renderPathTaken(
       map: HeightMap,
-      pathTaken: Seq[Position],
-      index: Int = 0
+      pathTaken: Seq[Position]
   ): Seq[Seq[String]] = {
     if (pathTaken.length == 0) { return map }
     val (x, y) = pathTaken.head
-    val char = getChar(map, pathTaken.last)
-    val newMap = map.updated(y, map(y).updated(x, "X".toString))
-    return renderPathTaken(newMap, pathTaken.tail, index + 1)
+    val nextPosition = pathTaken.tail.headOption
+    val icon: String =
+      if (pathTaken.length == 1) "E"
+      else
+        nextPosition match {
+          case Some((nextX, nextY)) =>
+            if (nextX == x && y > nextY)
+              "^"
+            if (nextX == x && y < nextY) {
+              "v"
+            } else if (nextY == y && nextX < x) {
+              "<"
+            } else if (nextY == y && nextX > x) {
+              ">"
+            } else {
+              "^"
+            }
+          case None => "E"
+        }
+    val newMap = map.updated(y, map(y).updated(x, icon))
+    return renderPathTaken(newMap, pathTaken.tail)
   }
 
   def printPathTaken(
@@ -88,8 +105,19 @@ object Day12 {
     println("starting point is", startingPoint)
     val a = startingPoint.get._2
     val res = recurse(map, Seq(a))
-    println("recurse done")
+    for (path <- res) {
+      printPathTaken(map, path)
+    }
+    println(s"""recurse done found paths: ${res.length}""")
     val min = res.minBy(_.size)
+
+    println(s"""paths with min size ${res.filter(_.size == min.size).length}""")
+
+    for (path <- res.filter(_.size == min.size)) {
+      printPathTaken(map, path)
+      println("----")
+
+    }
 
     printPathTaken(map, min)
     return min.length - 1
