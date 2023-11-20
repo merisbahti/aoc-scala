@@ -91,7 +91,6 @@ object Day12 {
     println("recurse done")
     val min = res.minBy(_.size)
 
-    println(min.length)
     printPathTaken(map, min)
     return min.length - 1
 

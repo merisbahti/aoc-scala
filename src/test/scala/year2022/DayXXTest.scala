@@ -8,7 +8,7 @@ class DayXXTest extends org.scalatest.funsuite.AnyFunSuite {
   val inputFile = "src/test/scala/year2022/Day02-input.txt"
   val testInput = """"""
   val Day = DayXX
-  val skipTest = true
+  val skipTest = this.getClass().getName() == "year2022.DayXXTest"
 
   test("test input") {
     if (!skipTest)
