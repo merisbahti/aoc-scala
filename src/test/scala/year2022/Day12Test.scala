@@ -17,10 +17,19 @@ class Day12Test extends org.scalatest.funsuite.AnyFunSuite {
 
   test("possibleSteps") {
     val map = Day.parseMap(testInput)
-    assert(Day.getPossibleSteps(map, (0, 0)) == Seq((0, 1), (1, 0)))
-    assert(Day.getPossibleSteps(map, (1, 1)) == Seq((1, 2), (2, 1)))
-    assert(Day.getPossibleSteps(map, (2, 2)) == Seq())
-    assert(Day.getPossibleSteps(map, (4, 2)) == Seq((5, 2)))
+    assert(Day.getPossibleSteps(map, (0, 0), Seq()) == Seq((0, 1), (1, 0)))
+    assert(Day.getPossibleSteps(map, (1, 1), Seq()) == Seq((1, 2), (2, 1)))
+    assert(
+      Day.getPossibleSteps(map, (2, 2), Seq()) == List((1, 2), (2, 1), (2, 3))
+    )
+    assert(Day.getPossibleSteps(map, (4, 2), Seq()) == Seq((5, 2)))
+    assert(Day.getPossibleSteps(map, (4, 2), Seq()) == Seq((5, 2)))
+    assert(
+      Day.getPossibleSteps(map, (2, 3), Seq()) == Seq((1, 3), (2, 2), (2, 4))
+    )
+    assert(
+      Day.getPossibleSteps(map, (2, 3), Seq((2, 2))) == Seq((1, 3), (2, 4))
+    )
   }
 
   test("test input") {
