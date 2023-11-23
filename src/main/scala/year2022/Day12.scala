@@ -17,7 +17,7 @@ object Day12 {
   def getPossibleSteps(
       map: HeightMap,
       position: Position,
-      pathTaken: Seq[Position]
+      visitedNodes: Seq[Position]
   ): Seq[Position] = {
     val (x, y) = position
 
@@ -37,7 +37,7 @@ object Day12 {
         || (currentChar == Some("z") && possibleChar == Some("E")))
       if (position != (x, y))
     } yield position
-    neighbors.filter(pos => !pathTaken.contains(pos))
+    neighbors.filter(pos => !visitedNodes.contains(pos))
   }
 
   def renderPathTaken(
