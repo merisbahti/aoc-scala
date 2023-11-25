@@ -18,16 +18,16 @@ class Day12Test extends org.scalatest.funsuite.AnyFunSuite {
   test("possibleSteps") {
     val map = Day.parseMap(testInput)
     assert(
-      Day.getPossibleSteps(map, (0, 0)) == Seq((0, 1), (1, 0))
+      Day.getNeighbors(map, (0, 0)) == Seq((0, 1), (1, 0))
     )
-    assert(Day.getPossibleSteps(map, (1, 1)) == Seq((1, 2), (2, 1)))
+    assert(Day.getNeighbors(map, (1, 1)) == Seq((1, 2), (2, 1)))
     assert(
-      Day.getPossibleSteps(map, (2, 2)) == List((2, 3), (1, 2), (2, 1))
+      Day.getNeighbors(map, (2, 2)) == List((2, 3), (1, 2), (2, 1))
     )
-    assert(Day.getPossibleSteps(map, (4, 2)) == Seq((5, 2)))
-    assert(Day.getPossibleSteps(map, (4, 2)) == Seq((5, 2)))
+    assert(Day.getNeighbors(map, (4, 2)) == Seq((5, 2)))
+    assert(Day.getNeighbors(map, (4, 2)) == Seq((5, 2)))
     assert(
-      Day.getPossibleSteps(map, (2, 3)) == Seq((2, 4), (1, 3), (2, 2))
+      Day.getNeighbors(map, (2, 3)) == Seq((2, 4), (1, 3), (2, 2))
     )
   }
 
@@ -48,7 +48,7 @@ class Day12Test extends org.scalatest.funsuite.AnyFunSuite {
           source.mkString
         }
       val input = res.get
-      assert(Day.sol1(input) === 13005)
+      assert(Day.sol1(input) === 462)
     }
   }
 

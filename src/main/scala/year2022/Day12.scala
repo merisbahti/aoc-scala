@@ -14,7 +14,10 @@ object Day12 {
 
   def getChar(map: HeightMap, position: Position): Option[String] = {
     val (x, y) = position
-    map.lift(y).flatMap(_.lift(x))
+    for {
+      row <- map.lift(y)
+      char <- row.lift(x)
+    } yield char
   }
 
   def getAltitude(char: String): Int = {
@@ -26,12 +29,11 @@ object Day12 {
     }
   }
 
-  def getPossibleSteps(
+  def getNeighbors(
       map: HeightMap,
       position: Position
   ): Seq[Position] = {
     val (x, y) = position
-
     val neighbors: Seq[Position] = for {
       (xDiff, yDiff) <- Seq((0, 1), (-1, 0), (1, 0), (0, -1))
       newPosition: Position = (x + xDiff, y + yDiff)
@@ -40,7 +42,7 @@ object Day12 {
         nextChar <- getChar(map, newPosition)
         diff = getAltitude(nextChar) - getAltitude(currentChar)
       } yield {
-        diff == 0 || diff == 1
+        diff <= 1
       }
       if (isAllowed.getOrElse(false))
     } yield newPosition
@@ -51,34 +53,46 @@ object Day12 {
 
   case class Context(visitedNodes: Seq[Node], queuedNodes: Seq[Node])
 
+  def printGraph(baseMap: HeightMap, graph: Map[Position, Int]): Unit = {
+    baseMap.zipWithIndex.foreach { case (row, y) =>
+      row.zipWithIndex.foreach { case (col, x) =>
+        val char = getChar(baseMap, (x, y)).get
+        val cost = graph.get((x, y))
+        val charToPrint = cost match {
+          case Some(cost) => "."
+          case None       => char
+        }
+        print(charToPrint)
+      }
+      println()
+    }
+  }
+
   def buildGraph(
       heightMap: HeightMap,
-      startNode: Node
-  ): Set[Node] = {
-    var visitedNodes: Set[Node] = Set()
-    var queuedNodes: PriorityQueue[Node] =
+      startNode: Node,
+      endPoint: Position
+  ): Map[Position, Int] = {
+    var gScore: Map[Position, Int] = Map(startNode.pos -> startNode.cost)
+    var openSet: PriorityQueue[Node] =
       PriorityQueue(startNode)(Ordering.by(-_.cost))
 
-    while (queuedNodes.nonEmpty) {
-      val currNode = queuedNodes.dequeue()
-      visitedNodes += currNode
-      println(s"blah $currNode, visitedNodes ${visitedNodes.size}")
+    while (openSet.nonEmpty && gScore.get(endPoint).isEmpty) {
+      val currNode = openSet.dequeue()
 
-      val neighbors = getPossibleSteps(
-        heightMap,
-        currNode.pos
-      ).map(nextPos => Node(nextPos, currNode.cost + 1))
-
-      val unvisitedNeighbors =
-        neighbors.filterNot(node => visitedNodes.map(_.pos).contains(node.pos))
-      println(
-        s"neighbors ${neighbors.length}, unvisited ${unvisitedNeighbors.length}"
-      )
-
-      unvisitedNeighbors.foreach(queuedNodes.enqueue(_))
+      for (nextPos <- getNeighbors(heightMap, currNode.pos)) {
+        val tentativeGscore = currNode.cost + 1
+        if (gScore.get(nextPos).getOrElse(Int.MaxValue) >= tentativeGscore) {
+          val nextNode = Node(nextPos, tentativeGscore)
+          gScore = gScore.updated(nextPos, tentativeGscore)
+          if (openSet.find(_.pos == nextPos).isEmpty)
+            openSet.enqueue(nextNode)
+        }
+      }
     }
+    printGraph(heightMap, gScore)
 
-    visitedNodes
+    gScore
   }
 
   def sol1(input: String): Int = {
@@ -104,12 +118,12 @@ object Day12 {
     println("getting starting point")
     val a = startingPoint.get._2
     println(s"starting point is $a")
-    val graph = buildGraph(map, Node(a, 0))
+    val graph = buildGraph(map, Node(a, 0), endPoint._2)
 
     println(s"endPoint is $endPoint")
-    val endNode = graph.find { x => x.pos == endPoint._2 }
+    val endNode = graph.get(endPoint._2)
 
-    return endNode.map(_.cost).getOrElse(-1)
+    return endNode.getOrElse(-1)
 
   }
 
