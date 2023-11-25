@@ -127,6 +127,34 @@ object Day12 {
 
   }
 
-  def sol2(input: String): Int = ???
+  def sol2(input: String): Int = {
+
+    val map = parseMap(input)
+    val startingPoints =
+      map.zipWithIndex
+        .map { case (rows, y) =>
+          rows.zipWithIndex.map { case (col, x) => (col, (x, y)) }
+        }
+        .flatten
+        .filter { case (col, pos) => col == "S" || col == "a" }
+
+    val endPoint =
+      map.zipWithIndex
+        .map { case (rows, y) =>
+          rows.zipWithIndex.map { case (col, x) => (col, (x, y)) }
+        }
+        .flatten
+        .find { case (col, pos) => col == "E" }
+        .getOrElse(throw new Error("could not find endpoint"))
+
+    println("getting starting point")
+    val alternatives = for {
+      startingPoint <- startingPoints
+      graph = buildGraph(map, Node(startingPoint._2, 0), endPoint._2)
+    } yield (startingPoint._2, graph.get(endPoint._2))
+
+    alternatives.minBy(_._2.getOrElse(Int.MaxValue))._2.getOrElse(-1)
+
+  }
 
 }

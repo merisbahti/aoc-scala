@@ -38,7 +38,7 @@ class Day12Test extends org.scalatest.funsuite.AnyFunSuite {
 
   test("test input sol2") {
     if (!skipTest)
-      assert(Day.sol2(testInput) == 12)
+      assert(Day.sol2(testInput) == 29)
   }
 
   test("real input") {
@@ -59,7 +59,7 @@ class Day12Test extends org.scalatest.funsuite.AnyFunSuite {
           source.mkString
         }
       val input = res.get
-      assert(Day.sol2(input) === 11373)
+      assert(Day.sol2(input) === 451)
     }
   }
 
