@@ -61,7 +61,7 @@ class Day14Test extends org.scalatest.funsuite.AnyFunSuite {
 
   test("test input") {
     if (!skipTest)
-      assert(Day.sol1(testInput) == 15)
+      assert(Day.sol1(testInput) == 24)
   }
 
   test("test input sol2") {
@@ -69,7 +69,7 @@ class Day14Test extends org.scalatest.funsuite.AnyFunSuite {
       assert(Day.sol2(testInput) == 12)
   }
 
-  test("real input") {
+  test("real input part1") {
     if (!skipTest) {
       val res =
         Using(Source.fromFile(inputFile)) { source =>
