@@ -2,12 +2,28 @@ package year2023
 
 import scala.util.Using
 import scala.io.Source
+import scala.util.Try
 
 class Day01Test extends org.scalatest.funsuite.AnyFunSuite {
-  def sol1(input: String): Int = ???
+  def sol1(input: String): Int = input
+    .split("\n")
+    .map(line => {
+
+      val digits =
+        line.split("").filter(x => Try(Integer.parseInt(x)).isSuccess)
+
+      val first = digits.apply(0)
+      val last = digits.reverse.apply(0)
+
+      Integer.parseInt(first + last)
+    })
+    .sum
   def sol2(input: String): Int = ???
 
-  val testInput = """"""
+  val testInput = """1abc2
+pqr3stu8vwx
+a1b2c3d4e5f
+treb7uchet"""
 
   val dayName =
     this.getClass().getName().split("\\.").last.replace("Test", "")
@@ -15,11 +31,19 @@ class Day01Test extends org.scalatest.funsuite.AnyFunSuite {
   val skipTest = dayName == "DayXX"
 
   test("test input") {
-    if (!skipTest) assert(sol1(testInput) == -1)
+    if (!skipTest) assert(sol1(testInput) == 142)
   }
 
+  val testinput2 = """two1nine
+eightwothree
+abcone2threexyz
+xtwone3four
+4nineeightseven2
+zoneight234
+7pqrstsixteen"""
+
   test("test input sol2") {
-    if (!skipTest) assert(sol2(testInput) == -1)
+    if (!skipTest) assert(sol2(testInput) == 281)
   }
 
   test("real input") {
@@ -29,7 +53,7 @@ class Day01Test extends org.scalatest.funsuite.AnyFunSuite {
           source.mkString
         }
       val input = res.get
-      assert(sol1(input) === -1)
+      assert(sol1(input) === 54597)
     }
   }
 
