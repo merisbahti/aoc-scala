@@ -18,7 +18,37 @@ class Day01Test extends org.scalatest.funsuite.AnyFunSuite {
       Integer.parseInt(first + last)
     })
     .sum
-  def sol2(input: String): Int = ???
+  def sol2(input: String): Int = {
+    val needles = Seq(
+      "one",
+      "two",
+      "three",
+      "four",
+      "five",
+      "six",
+      "seven",
+      "eight",
+      "nine"
+    )
+
+    val regex = (needles :+ "\\d").mkString("|").r
+
+    def parseMatched(matched: String): String = {
+      val index = needles.indexOf(matched)
+      if (index != -1) { (index + 1).toString }
+      else matched
+    }
+    input
+      .split("\n")
+      .map(lines => {
+        val matches = regex.findAllMatchIn(lines).toSeq
+        val first = parseMatched(matches(0).toString())
+        val last = parseMatched(matches.reverse(0).toString())
+        Integer.parseInt(first + last)
+      })
+      .sum
+
+  }
 
   val testInput = """1abc2
 pqr3stu8vwx
@@ -43,7 +73,7 @@ zoneight234
 7pqrstsixteen"""
 
   test("test input sol2") {
-    if (!skipTest) assert(sol2(testInput) == 281)
+    if (!skipTest) assert(sol2(testinput2) == 281)
   }
 
   test("real input") {
@@ -53,7 +83,7 @@ zoneight234
           source.mkString
         }
       val input = res.get
-      assert(sol1(input) === 54597)
+      assert(sol1(input) == 54597)
     }
   }
 
@@ -64,7 +94,7 @@ zoneight234
           source.mkString
         }
       val input = res.get
-      assert(sol2(input) === -1)
+      assert(sol2(input) == -1)
     }
   }
 
