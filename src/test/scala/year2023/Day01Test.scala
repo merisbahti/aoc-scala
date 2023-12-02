@@ -32,6 +32,7 @@ class Day01Test extends org.scalatest.funsuite.AnyFunSuite {
     )
 
     val regex = (needles :+ "\\d").mkString("|").r
+    val backwardRegex = (needles.map(_.reverse) :+ "\\d").mkString("|").r
 
     def parseMatched(matched: String): String = {
       val index = needles.indexOf(matched)
@@ -40,10 +41,10 @@ class Day01Test extends org.scalatest.funsuite.AnyFunSuite {
     }
     input
       .split("\n")
-      .map(lines => {
-        val matches = regex.findAllMatchIn(lines).toSeq
-        val first = parseMatched(matches(0).toString())
-        val last = parseMatched(matches.reverse(0).toString())
+      .map(line => {
+        val first = parseMatched(regex.findFirstIn(line).get)
+        val last =
+          parseMatched(backwardRegex.findFirstIn(line.reverse).get.reverse)
         Integer.parseInt(first + last)
       })
       .sum
@@ -59,6 +60,11 @@ treb7uchet"""
     this.getClass().getName().split("\\.").last.replace("Test", "")
   val inputFile = s"src/test/scala/year2023/${dayName}-input.txt"
   val skipTest = dayName == "DayXX"
+
+  test("unaccounted for tests") {
+    assert(sol2("eighthree") === 83)
+    assert(sol2("sevenine") === 79)
+  }
 
   test("test input") {
     if (!skipTest) assert(sol1(testInput) == 142)
