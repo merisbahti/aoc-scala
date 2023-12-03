@@ -11,7 +11,7 @@ class DayXXTest extends org.scalatest.funsuite.AnyFunSuite {
 
   val dayName =
     this.getClass().getName().split("\\.").last.replace("Test", "")
-  val inputFile = s"./${dayName}-input.txt"
+  val inputFile = s"src/test/scala/year2023/${dayName}-input.txt"
   val skipTest = dayName == "DayXX"
 
   test("test input") {
