@@ -2,6 +2,7 @@ package year2023
 
 import scala.util.Using
 import scala.io.Source
+import scala.annotation.tailrec
 
 class Day04Test extends org.scalatest.funsuite.AnyFunSuite {
   def sol1(input: String): Int = {
@@ -53,7 +54,85 @@ class Day04Test extends org.scalatest.funsuite.AnyFunSuite {
 
     lines.sum
   }
-  def sol2(input: String): Int = ???
+  def sol2(input: String): Int = {
+    val firstSplit = input.split("\n")
+    val lines = firstSplit.map { line =>
+      val splitLine = line.split("\\s*\\|\\s*")
+      if (splitLine.length != 2) {
+        throw new Exception("Invalid input")
+      }
+      val winningStrings = splitLine.apply(1).trim().split("\\s+")
+
+      if (
+        winningStrings
+          .map(_.toIntOption)
+          .flatten
+          .length != winningStrings.length
+      ) {
+        throw new Exception("Invalid input")
+      }
+
+      val winningNumbers = winningStrings.map(_.toInt)
+      val myStrings =
+        splitLine
+          .apply(0)
+          .split("\\s*:\\s*")
+          .apply(1)
+          .trim()
+          .split("\\s+")
+
+      if (
+        myStrings
+          .map(_.toIntOption)
+          .flatten
+          .length != myStrings.length
+      ) {
+        throw new Exception("Invalid input")
+      }
+      val myNumbers =
+        myStrings.map(_.toInt)
+
+      val wins = myNumbers.filter(winningNumbers.contains(_)).length
+
+      wins
+    }
+
+    @tailrec
+    def processCards(
+        processed: Map[Int, Int],
+        toProcess: Seq[Int]
+    ): Map[Int, Int] = {
+      val currentProcessOption = toProcess.headOption
+      if (currentProcessOption.isEmpty) {
+        processed
+      } else {
+        val current = currentProcessOption.head
+        val newScratchCardsToGet = lines.apply(current)
+        val newIndexes =
+          (current to current + newScratchCardsToGet).tail.toArray.toSeq
+        val nextToProcess = toProcess.tail ++ newIndexes.toSeq
+
+        val newProcessed =
+          newIndexes.foldLeft(
+            processed
+          ) {
+            case (acc, current) => {
+              acc.updatedWith(current) { current =>
+                Some(current.getOrElse(0) + 1)
+              }
+            }
+          }
+        processCards(newProcessed, nextToProcess)
+      }
+    }
+
+    val processed =
+      processCards(
+        (0 to lines.length - 1).map(_ -> 1).toMap,
+        (0 to lines.length - 1)
+      )
+    processed.values.sum
+  }
 
   val testInput = """Card 1: 41 48 83 86 17 | 83 86  6 31 17  9 48 53
 Card 2: 13 32 20 16 61 | 61 30 68 82 17 32 24 19
@@ -72,7 +151,7 @@ Card 6: 31 18 13 56 72 | 74 77 10 23 35 67 36 11""".trim()
   }
 
   test("test input sol2") {
-    if (!skipTest) assert(sol2(testInput) == -1)
+    if (!skipTest) assert(sol2(testInput) == 30)
   }
 
   test("real input") {
@@ -93,7 +172,7 @@ Card 6: 31 18 13 56 72 | 74 77 10 23 35 67 36 11""".trim()
           source.mkString
         }
       val input = res.get
-      assert(sol2(input) === -1)
+      assert(sol2(input) === 13768818)
     }
   }
 
